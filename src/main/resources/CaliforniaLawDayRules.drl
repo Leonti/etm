@@ -1,0 +1,32 @@
+#created on: Feb 18, 2012
+package com.leonty.etm.rule
+
+#list any import classes here.
+import com.leonty.etm.time.WorkDay;
+
+
+#declare any global variables here
+
+rule "Set regular overtime"
+
+    when
+        #conditions
+        DayLimits($regularOvertimeLimit : regularOvertimeLimit)
+        $workDay: WorkDay (totalTimeSpan > $regularOvertimeLimit)
+    then
+        #actions
+        $workDay.setRegularOvertimeStart($regularOvertimeLimit);
+        #System.out.println("Rule executed regular " + $regularOvertimeLimit + " " + $workDay.getRegularTimeSpan());
+end
+
+rule "Set extra overtime"
+    #include attributes such as "salience" here...
+    when
+        #conditions
+        DayLimits($extraOvertimeLimit : extraOvertimeLimit)
+        $workDay: WorkDay (totalTimeSpan > $extraOvertimeLimit)
+    then
+        #actions
+        $workDay.setExtraOvertimeStart($extraOvertimeLimit);
+        #System.out.println("Rule executed extra " + $extraOvertimeLimit);
+end

@@ -1,0 +1,34 @@
+#created on: Feb 18, 2012
+package com.leonty.etm.rule
+
+#list any import classes here.
+import com.leonty.etm.time.WorkWeek;
+
+
+#declare any global variables here
+
+
+rule "Check if we reached consecutive days"
+
+    when
+        #conditions
+        WeekLimits($consecutiveDaysLimit : consecutiveDaysLimit)
+        DayLimits($regularOvertimeLimit : regularOvertimeLimit)
+        $workWeek : WorkWeek (consecutiveDays > $consecutiveDaysLimit)
+    then
+        #actions
+        $workWeek.setOvertimeStart($workWeek.getTotalTimeSpan($consecutiveDaysLimit), $regularOvertimeLimit);
+        #System.out.println("Consecutive days executed!");
+end
+
+rule "Check if we reached regular week overtime"
+    #include attributes such as "salience" here...
+    when
+        #conditions
+        WeekLimits($overtimeLimit : overtimeLimit)
+        $workWeek : WorkWeek (regularTimeSpan > $overtimeLimit)
+    then
+        #actions
+        $workWeek.setOvertimeStart($workWeek.getRelativeToRegular($overtimeLimit));
+		#System.out.println("Regular week overtime!");
+end
