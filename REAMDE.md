@@ -12,6 +12,6 @@ v1.0 2012-08-09 Leonty Belskiy
 ##License
 
 ETM
-Copyright 2012 Leonty Belskiy, prishelec@gmail.com.
+Copyright 2012 Leonty Belskiy, prishelec[at]gmail.com.
 
 Licensed under the Apache License, Version 2.0
