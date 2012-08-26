@@ -74,6 +74,7 @@ public class Overtime {
 		KnowledgeBuilder builder = KnowledgeBuilderFactory.newKnowledgeBuilder(config);  
         
         //Add drl file into builder  
+		
         builder.add(ResourceFactory.newInputStreamResource(getClass().getResourceAsStream("/" + drlFile)), ResourceType.DRL);  
         
         if (builder.hasErrors()) {  

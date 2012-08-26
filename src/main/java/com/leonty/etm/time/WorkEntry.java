@@ -2,8 +2,10 @@ package com.leonty.etm.time;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Calendar;
 import java.util.Date;
+
+import org.joda.time.DateTime;
+import org.joda.time.Duration;
 
 public class WorkEntry {
 	private Date timeIn;
@@ -24,35 +26,38 @@ public class WorkEntry {
 	}
 		
 	public BigDecimal getRegularPayment() {
-		Calendar start = Calendar.getInstance();
-		start.setTime(timeIn);
-
-		Calendar end = Calendar.getInstance();
-		end.setTime(getRegularOvertimeStart());
 		
-		BigDecimal timeDiff = BigDecimal.valueOf(CalendarUtils.difference(start, end, CalendarUtils.Unit.SECOND));
+		DateTime start = new DateTime(timeIn);
+		DateTime end = new DateTime(getRegularOvertimeStart());
+		
+		Duration duration = new Duration(start, end);
+		
+		BigDecimal durationInSeconds = BigDecimal.valueOf(duration.getStandardSeconds());
 		
 		return this.wage.multiply(
-				timeDiff).divide(new BigDecimal(60*60), 4, RoundingMode.HALF_UP);
+				durationInSeconds).divide(new BigDecimal(60*60), 4, RoundingMode.HALF_UP);
 	}
 	
 	public BigDecimal getRegularOvertimePayment(BigDecimal multiplier) {
 		if (getTime(OvertimeCheckpoints.REGULAR_OVERTIME) == null) {
 			return new BigDecimal(0);
 		} else {
-			Calendar start = Calendar.getInstance();
-			start.setTime(getTime(OvertimeCheckpoints.REGULAR_OVERTIME));
-			Calendar end = Calendar.getInstance();
+			
+			DateTime start = new DateTime(getTime(OvertimeCheckpoints.REGULAR_OVERTIME));
+			DateTime end;
 			
 			if (getTime(OvertimeCheckpoints.EXTRA_OVERTIME) == null) { 
-				end.setTime(timeOut);
+
+				end = new DateTime(timeOut);
 			} else {
-				end.setTime(getTime(OvertimeCheckpoints.EXTRA_OVERTIME));
+
+				end = new DateTime(getTime(OvertimeCheckpoints.EXTRA_OVERTIME));
 			}
+
+			Duration duration = new Duration(start, end);		
+			BigDecimal durationInSeconds = BigDecimal.valueOf(duration.getStandardSeconds());			
 			
-			BigDecimal timeSpan = BigDecimal.valueOf(CalendarUtils.difference(start, end, CalendarUtils.Unit.SECOND));
-			
-			return calculatePayment(timeSpan, multiplier);		
+			return calculatePayment(durationInSeconds, multiplier);		
 		}
 	}
 	
@@ -61,14 +66,14 @@ public class WorkEntry {
 				|| getTime(OvertimeCheckpoints.EXTRA_OVERTIME) == null) {
 			return new BigDecimal(0);
 		} else {
-			Calendar start = Calendar.getInstance();
-			start.setTime(getTime(OvertimeCheckpoints.EXTRA_OVERTIME));
-			Calendar end = Calendar.getInstance();
-			end.setTime(timeOut);	
+
+			DateTime start = new DateTime(getTime(OvertimeCheckpoints.EXTRA_OVERTIME));
+			DateTime end = new DateTime(timeOut);
 			
-			BigDecimal timeSpan = BigDecimal.valueOf(CalendarUtils.difference(start, end, CalendarUtils.Unit.SECOND));
+			Duration duration = new Duration(start, end);		
+			BigDecimal durationInSeconds = BigDecimal.valueOf(duration.getStandardSeconds());			
 			
-			return calculatePayment(timeSpan, multiplier);			
+			return calculatePayment(durationInSeconds, multiplier);			
 		}
 	}
 	
@@ -80,44 +85,24 @@ public class WorkEntry {
 				).divide(new BigDecimal(60*60), 4, RoundingMode.HALF_UP);		
 	}
 	
-	public Long getRegularTimeSpan() {
-		Calendar start = Calendar.getInstance();
-		start.setTime(getTimeIn());		
-
-		Calendar end = Calendar.getInstance();
-		end.setTime(getRegularOvertimeStart());
-		
-		return CalendarUtils.difference(start, end, CalendarUtils.Unit.SECOND);
+	public Long getRegularTimeSpan() {	
+		return new Duration(new DateTime(getTimeIn()), new DateTime(getRegularOvertimeStart()))
+			.getStandardSeconds();			
 	}
 	
-	public Long getRegularOvertimeTimeSpan() {
-		Calendar start = Calendar.getInstance();
-		start.setTime(getRegularOvertimeStart());		
-
-		Calendar end = Calendar.getInstance();
-		end.setTime(getExtraOvertimeStart());
-		
-		return CalendarUtils.difference(start, end, CalendarUtils.Unit.SECOND);		
+	public Long getRegularOvertimeTimeSpan() {						
+		return new Duration(new DateTime(getRegularOvertimeStart()), new DateTime(getExtraOvertimeStart()))
+			.getStandardSeconds();		
 	}
 	
-	public Long getExtraOvertimeTimeSpan() {
-		Calendar start = Calendar.getInstance();
-		start.setTime(getExtraOvertimeStart());		
-
-		Calendar end = Calendar.getInstance();
-		end.setTime(getTimeOut());
-		
-		return CalendarUtils.difference(start, end, CalendarUtils.Unit.SECOND);	
+	public Long getExtraOvertimeTimeSpan() {		
+		return new Duration(new DateTime(getExtraOvertimeStart()), new DateTime(getTimeOut()))
+			.getStandardSeconds();		
 	}
 	
-	public Long getTotalTimeSpan() {
-		Calendar start = Calendar.getInstance();
-		start.setTime(getTimeIn());
-		
-		Calendar end = Calendar.getInstance();
-		end.setTime(getTimeOut());
-		
-		return CalendarUtils.difference(start, end, CalendarUtils.Unit.SECOND);		
+	public Long getTotalTimeSpan() {		
+		return new Duration(new DateTime(getTimeIn()), new DateTime(getTimeOut()))
+			.getStandardSeconds();		
 	}
 	
 	public Date getTimeIn() {

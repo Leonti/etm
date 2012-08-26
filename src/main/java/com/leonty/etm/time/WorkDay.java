@@ -2,7 +2,8 @@ package com.leonty.etm.time;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Calendar;
+
+import org.joda.time.DateTime;
 
 
 public class WorkDay {
@@ -22,26 +23,26 @@ public class WorkDay {
 	}
 	
 	public void setOvertimeStart(int position, Long overtimeLimit) {
-		long workedTime = 0;
+		Integer workedTime = 0;
 		
 		for (WorkEntry workEntry: entries) {
 			
 			// when total time for the day exceeds the limit 
 			if (workedTime + workEntry.getTotalTimeSpan() > overtimeLimit) {
 
-				Calendar start = Calendar.getInstance();
-				start.setTime(workEntry.getTimeIn());
-		
+				DateTime start = new DateTime(workEntry.getTimeIn());
+				
 				// overtime just reached
 				if (workedTime < overtimeLimit) {
-					Calendar overtimeStart = Calendar.getInstance();
-					overtimeStart.setTime(start.getTime());
 				
-					long overtimeDiff = overtimeLimit - workedTime;
-					CalendarUtils.add(overtimeStart, Calendar.SECOND, overtimeDiff);
+					DateTime overtimeStart = new DateTime(start);
+					
+					Integer overtimeDiff = overtimeLimit.intValue() - workedTime;
+					
+					overtimeStart = overtimeStart.plusSeconds(overtimeDiff);
 					
 					// setting start of the overtime
-					workEntry.setOvertimeStart(position, overtimeStart.getTime());
+					workEntry.setOvertimeStart(position, overtimeStart.toDate());
 					
 				// already on overtime - set overtime time to the time start	
 				} else {
@@ -49,7 +50,7 @@ public class WorkDay {
 				}
 			}
 			
-			workedTime += workEntry.getTotalTimeSpan();			
+			workedTime += workEntry.getTotalTimeSpan().intValue();			
 		}
 	}
 	
