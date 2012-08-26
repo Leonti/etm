@@ -87,14 +87,14 @@ public class WorkWeekTest {
 				getWeekLimits(20d, 7), 
 				getDayLimits(7.5, 24d));
 		
-		assertEquals(new Long(171000), week.getTotalTimeSpan());
+		assertEquals(new Long(171000), week.getTotalTimeSpanInSeconds());
 		
 		assertEquals(new Long(86400L), week.getRelativeToRegular(72000L));
 		
 		// should be 20 hours/ 72000 seconds
-		assertEquals(new Long(72000L), week.getRegularTimeSpan());
+		assertEquals(new Long(72000L), week.getRegularTimeSpanInSeconds());
 		
-		assertEquals(new Long(99000L), week.getRegularOvertimeTimeSpan());
+		assertEquals(new Long(99000L), week.getRegularOvertimeTimeSpanInSeconds());
 		
 		assertTrue(new BigDecimal(230L).compareTo(week.getRegularPayment()) == 0);
 		
@@ -111,16 +111,16 @@ public class WorkWeekTest {
 				getWeekLimits(20d, 2), 
 				getDayLimits(7.5, 24d));		
 		
-		assertEquals(new Long(171000), week.getTotalTimeSpan());
+		assertEquals(new Long(171000), week.getTotalTimeSpanInSeconds());
 		
 		// should be first 2 consecutive days 7.5*2 = 15 hours/ 54000 seconds - after that regular overtime starts
-		assertEquals(new Long(54000L), week.getRegularTimeSpan());
+		assertEquals(new Long(54000L), week.getRegularTimeSpanInSeconds());
 		
 		// 2 2 7.5 7.5 7.5
-		assertEquals(new Long(95400L), week.getRegularOvertimeTimeSpan());
+		assertEquals(new Long(95400L), week.getRegularOvertimeTimeSpanInSeconds());
 		
 		// 0 0 2 2 2
-		assertEquals(new Long(21600L), week.getExtraOvertimeTimeSpan());
+		assertEquals(new Long(21600L), week.getExtraOvertimeTimeSpanInSeconds());
 		
 		assertTrue(new BigDecimal(172.5).compareTo(week.getRegularPayment()) == 0);
 		

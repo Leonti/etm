@@ -18,6 +18,10 @@ public class WorkWeek {
 		days.add(day);
 	}
 	
+	public ArrayList<WorkDay> getDays() {
+		return days;
+	}
+	
 	public void setOvertimeStart(Long overtimeLimit, Long dayRegularOvertimeLimit) {
 		setOvertimeStart(overtimeLimit, true, dayRegularOvertimeLimit);
 	}
@@ -32,7 +36,7 @@ public class WorkWeek {
 
 		for (WorkDay workDay: days) {
 			
-			if (workedTime + workDay.getTotalTimeSpan() > overtimeLimit) {
+			if (workedTime + workDay.getTotalTimeSpanInSeconds() > overtimeLimit) {
 				
 					
 				// overtime just reached
@@ -56,7 +60,7 @@ public class WorkWeek {
 				}
 								
 			}			
-			workedTime += workDay.getTotalTimeSpan();	
+			workedTime += workDay.getTotalTimeSpanInSeconds();	
 		}		
 	}
 	
@@ -78,7 +82,7 @@ public class WorkWeek {
 		for (WorkDay workDay: days) {
 			
 			// just reached overtime assuming that we are counting only regular time
-			if (regularTime + workDay.getRegularTimeSpan() >= overtimeLimit) {
+			if (regularTime + workDay.getRegularTimeSpanInSeconds() >= overtimeLimit) {
 				
 				// Now return new calculated time ready for use with "setOvertimeStart"
 				// overtimeLimit - regularTime - time from the beginning of the day until the overtime starts
@@ -86,8 +90,8 @@ public class WorkWeek {
 				return overtimeLimit - regularTime + totalTime;
 			}
 			
-			regularTime += workDay.getRegularTimeSpan();
-			totalTime += workDay.getTotalTimeSpan();
+			regularTime += workDay.getRegularTimeSpanInSeconds();
+			totalTime += workDay.getTotalTimeSpanInSeconds();
 		}
 		
 		return overtimeLimit;
@@ -97,53 +101,69 @@ public class WorkWeek {
 		return days.size();
 	}	
 	
-	public Long getRegularTimeSpan() {
+	public Long getRegularTimeSpanInSeconds() {
 		
 		long workedTime = 0;
 		
 		for (WorkDay day : days) {
-			workedTime += day.getRegularTimeSpan();
+			workedTime += day.getRegularTimeSpanInSeconds();
 		}
 		
 		return workedTime;		
 	}
 	
-	public Long getRegularOvertimeTimeSpan() {
+	public Long getRegularOvertimeTimeSpanInSeconds() {
 		
 		long workedTime = 0;
 
 		for (WorkDay day : days) {
-			workedTime += day.getRegularOvertimeTimeSpan();
+			workedTime += day.getRegularOvertimeTimeSpanInSeconds();
 		}
 
 		return workedTime;				
 	}
 	
-	public Long getExtraOvertimeTimeSpan() {
+	public Long getExtraOvertimeTimeSpanInSeconds() {
 		long workedTime = 0;
 		
 		for (WorkDay day : days) {
-			workedTime += day.getExtraOvertimeTimeSpan();
+			workedTime += day.getExtraOvertimeTimeSpanInSeconds();
 		}
 		
 		return workedTime;			
 	}
 	
-	public Long getTotalTimeSpan() {
-		return getRegularTimeSpan() + getRegularOvertimeTimeSpan() + getExtraOvertimeTimeSpan();
+	public Long getTotalTimeSpanInSeconds() {
+		return getRegularTimeSpanInSeconds() + getRegularOvertimeTimeSpanInSeconds() + getExtraOvertimeTimeSpanInSeconds();
 	}
 	
 	
-	public Long getTotalTimeSpan(int daysCount) {
+	public Long getTotalTimeSpanInSeconds(int daysCount) {
 		
 		long workedTime = 0;
 		
 		for (int i = 0; i < daysCount; i++) {
 			
-			workedTime += days.get(i).getTotalTimeSpan();
+			workedTime += days.get(i).getTotalTimeSpanInSeconds();
 		}
 		
 		return workedTime;
+	}
+	
+	public Double getRegularTimeSpanInHours() {
+		return getRegularTimeSpanInSeconds()/3600d;			
+	}
+	
+	public Double getRegularOvertimeTimeSpanInHours() {						
+		return getRegularOvertimeTimeSpanInSeconds()/3600d;	
+	}
+	
+	public Double getExtraOvertimeTimeSpanInHours() {		
+		return getExtraOvertimeTimeSpanInSeconds()/3600d;		
+	}
+	
+	public Double getTotalTimeSpanInHours() {		
+		return getTotalTimeSpanInSeconds()/3600d;		
 	}	
 	
 	public BigDecimal getRegularPayment() {

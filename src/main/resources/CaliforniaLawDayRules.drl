@@ -12,7 +12,7 @@ rule "Set regular overtime"
     when
         #conditions
         DayLimits($regularOvertimeLimit : regularOvertimeLimit)
-        $workDay: WorkDay (totalTimeSpan > $regularOvertimeLimit)
+        $workDay: WorkDay (totalTimeSpanInSeconds > $regularOvertimeLimit)
     then
         #actions
         $workDay.setRegularOvertimeStart($regularOvertimeLimit);
@@ -24,7 +24,7 @@ rule "Set extra overtime"
     when
         #conditions
         DayLimits($extraOvertimeLimit : extraOvertimeLimit)
-        $workDay: WorkDay (totalTimeSpan > $extraOvertimeLimit)
+        $workDay: WorkDay (totalTimeSpanInSeconds > $extraOvertimeLimit)
     then
         #actions
         $workDay.setExtraOvertimeStart($extraOvertimeLimit);

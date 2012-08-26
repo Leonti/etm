@@ -85,25 +85,41 @@ public class WorkEntry {
 				).divide(new BigDecimal(60*60), 4, RoundingMode.HALF_UP);		
 	}
 	
-	public Long getRegularTimeSpan() {	
+	public Long getRegularTimeSpanInSeconds() {	
 		return new Duration(new DateTime(getTimeIn()), new DateTime(getRegularOvertimeStart()))
 			.getStandardSeconds();			
 	}
 	
-	public Long getRegularOvertimeTimeSpan() {						
+	public Long getRegularOvertimeTimeSpanInSeconds() {						
 		return new Duration(new DateTime(getRegularOvertimeStart()), new DateTime(getExtraOvertimeStart()))
 			.getStandardSeconds();		
 	}
 	
-	public Long getExtraOvertimeTimeSpan() {		
+	public Long getExtraOvertimeTimeSpanInSeconds() {		
 		return new Duration(new DateTime(getExtraOvertimeStart()), new DateTime(getTimeOut()))
 			.getStandardSeconds();		
 	}
 	
-	public Long getTotalTimeSpan() {		
+	public Long getTotalTimeSpanInSeconds() {		
 		return new Duration(new DateTime(getTimeIn()), new DateTime(getTimeOut()))
 			.getStandardSeconds();		
 	}
+
+	public Double getRegularTimeSpanInHours() {
+		return getRegularTimeSpanInSeconds()/3600d;			
+	}
+	
+	public Double getRegularOvertimeTimeSpanInHours() {						
+		return getRegularOvertimeTimeSpanInSeconds()/3600d;	
+	}
+	
+	public Double getExtraOvertimeTimeSpanInHours() {		
+		return getExtraOvertimeTimeSpanInSeconds()/3600d;		
+	}
+	
+	public Double getTotalTimeSpanInHours() {		
+		return getTotalTimeSpanInSeconds()/3600d;		
+	}	
 	
 	public Date getTimeIn() {
 		return timeIn;

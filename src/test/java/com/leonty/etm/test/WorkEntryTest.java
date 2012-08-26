@@ -65,7 +65,9 @@ public class WorkEntryTest {
 		assertEquals(new BigDecimal(0), workEntry.getRegularOvertimePayment(new BigDecimal(1.5)));				
 
 		// total time in seconds for entry
-		assertEquals(new Long(34200L), workEntry.getTotalTimeSpan());	
+		assertEquals(new Long(34200L), workEntry.getTotalTimeSpanInSeconds());
+		
+		assertEquals(new Double(9.5d), workEntry.getTotalTimeSpanInHours());
 	}
 	
 	@Test
@@ -80,14 +82,19 @@ public class WorkEntryTest {
 		assertTrue(new BigDecimal(34.50).compareTo(workEntry.getRegularOvertimePayment(new BigDecimal(1.5))) == 0);	
 		
 		// get normal time span in seconds
-		assertEquals(new Long(27000L), workEntry.getRegularTimeSpan());
+		assertEquals(new Long(27000L), workEntry.getRegularTimeSpanInSeconds());
+		
+		assertEquals(new Double(7.5d), workEntry.getRegularTimeSpanInHours());
 		
 		// get Overtime time span in seconds
-		assertEquals(new Long(7200L), workEntry.getRegularOvertimeTimeSpan());
+		assertEquals(new Long(7200L), workEntry.getRegularOvertimeTimeSpanInSeconds());
+		
+		assertEquals(new Double(2d), workEntry.getRegularOvertimeTimeSpanInHours());
 		
 		// total time in seconds for entry
-		assertEquals(new Long(34200L), workEntry.getTotalTimeSpan());
-
+		assertEquals(new Long(34200L), workEntry.getTotalTimeSpanInSeconds());
+		
+		assertEquals(new Double(9.5d), workEntry.getTotalTimeSpanInHours());
 	}
 	
 	@Test
@@ -96,12 +103,12 @@ public class WorkEntryTest {
 		WorkEntry workEntry = createExtraOvertimeWorkEntry();
 
 		// get normal time span in seconds
-		assertEquals(new Long(27000L), workEntry.getRegularTimeSpan());
+		assertEquals(new Long(27000L), workEntry.getRegularTimeSpanInSeconds());
 		
 		// get Overtime time span in seconds
-		assertEquals(new Long(3600L), workEntry.getRegularOvertimeTimeSpan());
+		assertEquals(new Long(3600L), workEntry.getRegularOvertimeTimeSpanInSeconds());
 		
-		assertEquals(new Long(3600L), workEntry.getExtraOvertimeTimeSpan());		
+		assertEquals(new Long(3600L), workEntry.getExtraOvertimeTimeSpanInSeconds());		
 		
 		// normal payment with overtime set
 		assertTrue(new BigDecimal(86.25).compareTo(workEntry.getRegularPayment()) == 0);
@@ -113,7 +120,7 @@ public class WorkEntryTest {
 		assertTrue(new BigDecimal(23).compareTo(workEntry.getExtraOvertimePayment(new BigDecimal(2))) == 0);	
 		
 		// total time in seconds for entry
-		assertEquals(new Long(34200L), workEntry.getTotalTimeSpan());	
+		assertEquals(new Long(34200L), workEntry.getTotalTimeSpanInSeconds());	
 	}	
 
 }

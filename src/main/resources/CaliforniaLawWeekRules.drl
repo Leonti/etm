@@ -17,7 +17,7 @@ rule "Check if we reached consecutive days"
         $workWeek : WorkWeek (consecutiveDays > $consecutiveDaysLimit)
     then
         #actions
-        $workWeek.setOvertimeStart($workWeek.getTotalTimeSpan($consecutiveDaysLimit), $regularOvertimeLimit);
+        $workWeek.setOvertimeStart($workWeek.getTotalTimeSpanInSeconds($consecutiveDaysLimit), $regularOvertimeLimit);
         #System.out.println("Consecutive days executed!");
 end
 
@@ -26,7 +26,7 @@ rule "Check if we reached regular week overtime"
     when
         #conditions
         WeekLimits($overtimeLimit : overtimeLimit)
-        $workWeek : WorkWeek (regularTimeSpan > $overtimeLimit)
+        $workWeek : WorkWeek (regularTimeSpanInSeconds > $overtimeLimit)
     then
         #actions
         $workWeek.setOvertimeStart($workWeek.getRelativeToRegular($overtimeLimit));

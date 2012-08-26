@@ -2,6 +2,7 @@ package com.leonty.etm.time;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.joda.time.DateTime;
 
@@ -12,6 +13,14 @@ public class WorkDay {
 	
 	public void addEntry(WorkEntry workEntry) {
 		entries.add(workEntry);
+	}
+	
+	public void addEntries(List<WorkEntry> workEntries) {
+		entries.addAll(workEntries);
+	}
+	
+	public List<WorkEntry> getEntries() {
+		return entries;
 	}
 	
 	public void setRegularOvertimeStart(Long overtimeLimit) {
@@ -28,7 +37,7 @@ public class WorkDay {
 		for (WorkEntry workEntry: entries) {
 			
 			// when total time for the day exceeds the limit 
-			if (workedTime + workEntry.getTotalTimeSpan() > overtimeLimit) {
+			if (workedTime + workEntry.getTotalTimeSpanInSeconds() > overtimeLimit) {
 
 				DateTime start = new DateTime(workEntry.getTimeIn());
 				
@@ -50,49 +59,65 @@ public class WorkDay {
 				}
 			}
 			
-			workedTime += workEntry.getTotalTimeSpan().intValue();			
+			workedTime += workEntry.getTotalTimeSpanInSeconds().intValue();			
 		}
 	}
 	
-	public Long getRegularTimeSpan() {
+	public Long getRegularTimeSpanInSeconds() {
 		long workedTime = 0;
 		
 		for (WorkEntry workEntry : entries) {
-			workedTime += workEntry.getRegularTimeSpan();
+			workedTime += workEntry.getRegularTimeSpanInSeconds();
 		}
 		
 		return workedTime;
 	}
 	
-	public Long getRegularOvertimeTimeSpan() {
+	public Long getRegularOvertimeTimeSpanInSeconds() {
 		long workedTime = 0;
 		
 		for (WorkEntry workEntry : entries) {
-			workedTime += workEntry.getRegularOvertimeTimeSpan();
+			workedTime += workEntry.getRegularOvertimeTimeSpanInSeconds();
 		}
 		
 		return workedTime;		
 	}
 
-	public Long getExtraOvertimeTimeSpan() {
+	public Long getExtraOvertimeTimeSpanInSeconds() {
 		long workedTime = 0;
 		
 		for (WorkEntry workEntry : entries) {
-			workedTime += workEntry.getExtraOvertimeTimeSpan();
+			workedTime += workEntry.getExtraOvertimeTimeSpanInSeconds();
 		}
 		
 		return workedTime;		
 	}	
 	
-	public Long getTotalTimeSpan() {
+	public Long getTotalTimeSpanInSeconds() {
 		long workedTime = 0;
 		
 		for (WorkEntry workEntry : entries) {
-			workedTime += workEntry.getTotalTimeSpan();
+			workedTime += workEntry.getTotalTimeSpanInSeconds();
 		}
 		
 		return workedTime;
 	}
+
+	public Double getRegularTimeSpanInHours() {
+		return getRegularTimeSpanInSeconds()/3600d;			
+	}
+	
+	public Double getRegularOvertimeTimeSpanInHours() {						
+		return getRegularOvertimeTimeSpanInSeconds()/3600d;	
+	}
+	
+	public Double getExtraOvertimeTimeSpanInHours() {		
+		return getExtraOvertimeTimeSpanInSeconds()/3600d;		
+	}
+	
+	public Double getTotalTimeSpanInHours() {		
+		return getTotalTimeSpanInSeconds()/3600d;		
+	}	
 	
 	public BigDecimal getRegularPayment() {
 		BigDecimal payment = new BigDecimal(0);

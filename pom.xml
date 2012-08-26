@@ -7,6 +7,9 @@
 	<name>ETM</name>
 	<description>ETM library - calculates pay and overtime pay based on worked time</description>
 
+	<properties>
+	  <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
 	<dependencies>
 
 		<!-- Drools engine -->
@@ -49,6 +52,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
 				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>
