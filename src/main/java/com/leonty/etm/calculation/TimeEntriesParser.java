@@ -1,4 +1,4 @@
-package com.leonty.calculation;
+package com.leonty.etm.calculation;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -31,7 +31,7 @@ public class TimeEntriesParser {
 			
 			DateTime currentTimeDayEnd = currentTimeDayStart.plusHours(24);
 			
-			WorkDay workDay = new WorkDay();
+			WorkDay workDay = new WorkDay(currentTimeDayStart.toDate(), currentTimeDayEnd.toDate());
 			
 			workDay.addEntries(getWorkEntriesForDuration(currentTimeDayStart, currentTimeDayEnd, timeEntries));
 	
@@ -65,7 +65,8 @@ public class TimeEntriesParser {
 				workEntries.add(new WorkEntry(
 					getTimeIn(timeEntry, start.toDate()), 
 					getTimeOut(timeEntry, end.toDate()), 
-					timeEntry.getWage()));				
+					timeEntry.getWage(),
+					timeEntry.getJobTitle()));				
 			}
 		}
 		

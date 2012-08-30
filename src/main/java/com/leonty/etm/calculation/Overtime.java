@@ -1,5 +1,6 @@
-package com.leonty.calculation;
+package com.leonty.etm.calculation;
 
+import java.util.List;
 import java.util.Properties;
 
 import org.drools.KnowledgeBase;
@@ -11,23 +12,15 @@ import org.drools.builder.ResourceType;
 import org.drools.io.ResourceFactory;
 import org.drools.runtime.StatefulKnowledgeSession;
 
-import com.leonty.etm.rule.DayLimits;
-import com.leonty.etm.rule.WeekLimits;
 import com.leonty.etm.time.WorkDay;
 import com.leonty.etm.time.WorkWeek;
 
 public class Overtime {
 
-	private KnowledgeBase dayKnowledgeBase;
-	private KnowledgeBase weekKnowledgeBase;
+	private static KnowledgeBase dayKnowledgeBase = createKnowledgeBase("CaliforniaLawDayRules.drl");
+	private static KnowledgeBase weekKnowledgeBase = createKnowledgeBase("CaliforniaLawWeekRules.drl");
 	
-	public Overtime() {
-		
-		dayKnowledgeBase = createKnowledgeBase("CaliforniaLawDayRules.drl");
-		weekKnowledgeBase = createKnowledgeBase("CaliforniaLawWeekRules.drl");
-	}
-	
-	public WorkDay calculateDay(WorkDay workDay, DayLimits dayLimits) {
+	public static WorkDay calculateDay(WorkDay workDay, DayLimits dayLimits) {
 
 		StatefulKnowledgeSession session = dayKnowledgeBase.newStatefulKnowledgeSession(); 
 		
@@ -45,9 +38,13 @@ public class Overtime {
 		return workDay;
 	}
 	
-	public WorkWeek calculateWeek(WorkWeek workWeek, WeekLimits weekLimits, DayLimits dayLimits) {
+	public static WorkWeek calculateWeek(WorkWeek workWeek, WeekLimits weekLimits, DayLimits dayLimits) {
 
 		StatefulKnowledgeSession session = weekKnowledgeBase.newStatefulKnowledgeSession(); 		
+		
+		for (WorkDay workDay : workWeek.getDays()) {
+			workDay = calculateDay(workDay, dayLimits);
+		}
 		
 		try {
 			
@@ -64,8 +61,18 @@ public class Overtime {
 		
 		return workWeek;
 	}
+
+	public static List<WorkWeek> calcualateWeeks(List<WorkWeek> workWeeks, WeekLimits weekLimits, DayLimits dayLimits) {
+		for (WorkWeek week : workWeeks) {
+			week = calculateWeek(week, 
+					weekLimits, 
+					dayLimits);
+		}
+		
+		return workWeeks;
+	}
 	
-	private KnowledgeBase createKnowledgeBase(String drlFile) {
+	private static KnowledgeBase createKnowledgeBase(String drlFile) {
 		Properties properties = new Properties();  
 		properties.setProperty( "drools.dialect.java.compiler","JANINO" );  
 		
@@ -74,8 +81,7 @@ public class Overtime {
 		KnowledgeBuilder builder = KnowledgeBuilderFactory.newKnowledgeBuilder(config);  
         
         //Add drl file into builder  
-		
-        builder.add(ResourceFactory.newInputStreamResource(getClass().getResourceAsStream("/" + drlFile)), ResourceType.DRL);  
+        builder.add(ResourceFactory.newInputStreamResource(Overtime.class.getResourceAsStream("/" + drlFile)), ResourceType.DRL);  
         
         if (builder.hasErrors()) {  
             throw new RuntimeException(builder.getErrors().toString());  

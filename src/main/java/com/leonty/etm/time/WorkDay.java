@@ -1,6 +1,7 @@
 package com.leonty.etm.time;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +11,14 @@ import org.joda.time.DateTime;
 public class WorkDay {
 
 	private ArrayList<WorkEntry> entries = new ArrayList<WorkEntry>();
+	private Date dayStart;
+	private Date dayEnd;
 	
+	public WorkDay(Date dayStart, Date dayEnd) {
+		this.dayStart = dayStart;
+		this.dayEnd = dayEnd;
+	}
+
 	public void addEntry(WorkEntry workEntry) {
 		entries.add(workEntry);
 	}
@@ -22,6 +30,14 @@ public class WorkDay {
 	public List<WorkEntry> getEntries() {
 		return entries;
 	}
+
+	public Date getDayStart() {
+		return dayStart;
+	}
+
+	public Date getDayEnd() {
+		return dayEnd;
+	}	
 	
 	public void setRegularOvertimeStart(Long overtimeLimit) {
 		setOvertimeStart(OvertimeCheckpoints.REGULAR_OVERTIME, overtimeLimit);

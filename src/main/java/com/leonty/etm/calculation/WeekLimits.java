@@ -1,4 +1,4 @@
-package com.leonty.etm.rule;
+package com.leonty.etm.calculation;
 
 public class WeekLimits {
 

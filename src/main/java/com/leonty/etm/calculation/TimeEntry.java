@@ -1,4 +1,4 @@
-package com.leonty.calculation;
+package com.leonty.etm.calculation;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -9,4 +9,5 @@ public interface TimeEntry {
 	Date getTimeOut();
 	void setTimeOut(Date timeOut);
 	BigDecimal getWage();
+	String getJobTitle();
 }

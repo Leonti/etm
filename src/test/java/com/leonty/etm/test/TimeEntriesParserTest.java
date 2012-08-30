@@ -8,8 +8,8 @@ import org.joda.time.DateTime;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.leonty.calculation.TimeEntriesParser;
-import com.leonty.calculation.TimeEntry;
+import com.leonty.etm.calculation.TimeEntriesParser;
+import com.leonty.etm.calculation.TimeEntry;
 import com.leonty.etm.time.WorkWeek;
 
 public class TimeEntriesParserTest {
@@ -22,7 +22,7 @@ public class TimeEntriesParserTest {
 		for(int i = 1; i < 11; i++) {
 			DateTime start = new DateTime(2012, 8, i, 8, 0);
 			DateTime end = new DateTime(2012, 8, i, 17, 0);			
-			timeEntries.add(new TimeEntryTestImpl(start.toDate(), end.toDate(), new BigDecimal(10d)));
+			timeEntries.add(new TimeEntryTestImpl(start.toDate(), end.toDate(), new BigDecimal(10d), "job"));
 		}
 		
 		return timeEntries;
@@ -49,7 +49,7 @@ public class TimeEntriesParserTest {
 		
 		List<TimeEntry> timeEntries = new ArrayList<TimeEntry>();
  
-		timeEntries.add(new TimeEntryTestImpl(new DateTime(2012, 8, 1, 8, 0).toDate(), new DateTime(2012, 8, 2, 17, 0).toDate(), new BigDecimal(10d)));
+		timeEntries.add(new TimeEntryTestImpl(new DateTime(2012, 8, 1, 8, 0).toDate(), new DateTime(2012, 8, 2, 17, 0).toDate(), new BigDecimal(10d), "job"));
 			
 		List<WorkWeek> workWeeks = TimeEntriesParser.getWorkWeeks(start.toDate(), end.toDate(), timeEntries);
 
@@ -68,7 +68,7 @@ public class TimeEntriesParserTest {
 		
 		List<TimeEntry> timeEntries = new ArrayList<TimeEntry>();
  
-		timeEntries.add(new TimeEntryTestImpl(new DateTime(2012, 8, 1, 8, 0).toDate(), null, new BigDecimal(10d)));
+		timeEntries.add(new TimeEntryTestImpl(new DateTime(2012, 8, 1, 8, 0).toDate(), null, new BigDecimal(10d), "job"));
 			
 		List<WorkWeek> workWeeks = TimeEntriesParser.getWorkWeeks(start.toDate(), end.toDate(), timeEntries);
 

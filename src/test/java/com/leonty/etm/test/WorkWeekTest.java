@@ -6,18 +6,17 @@ import static org.junit.Assert.assertTrue;
 import java.math.BigDecimal;
 import java.util.Calendar;
 
+import org.joda.time.DateTime;
 import org.junit.Test;
 
-import com.leonty.calculation.Overtime;
-import com.leonty.etm.rule.DayLimits;
-import com.leonty.etm.rule.WeekLimits;
+import com.leonty.etm.calculation.DayLimits;
+import com.leonty.etm.calculation.Overtime;
+import com.leonty.etm.calculation.WeekLimits;
 import com.leonty.etm.time.WorkDay;
 import com.leonty.etm.time.WorkEntry;
 import com.leonty.etm.time.WorkWeek;
 
 public class WorkWeekTest {
-
-	private Overtime overtime = new Overtime();
 
 	private DayLimits getDayLimits(Double overtimeLimit, Double extraOvertimeLimit) {
 		return new DayLimits(new BigDecimal(overtimeLimit).multiply(new BigDecimal(60*60)).longValueExact(), new BigDecimal(extraOvertimeLimit).multiply(new BigDecimal(60*60)).longValueExact());
@@ -37,30 +36,29 @@ public class WorkWeekTest {
 		end.set(2012, Calendar.JANUARY, dayOfMonth, 10, 0, 0);		
 		end.set(Calendar.MILLISECOND, 0);
 		
-		WorkEntry firstWorkEntry = new WorkEntry(start.getTime(), end.getTime(), new BigDecimal(11.5d));
+		WorkEntry firstWorkEntry = new WorkEntry(start.getTime(), end.getTime(), new BigDecimal(11.5d), "job");
 		
 		start.set(2012, Calendar.JANUARY, dayOfMonth, 10, 0, 0);
 		start.set(Calendar.MILLISECOND, 0);
 		end.set(2012, Calendar.JANUARY, dayOfMonth, 15, 0, 0);
 		end.set(Calendar.MILLISECOND, 0);
 		
-		WorkEntry secondWorkEntry = new WorkEntry(start.getTime(), end.getTime(), new BigDecimal(11.5d));
+		WorkEntry secondWorkEntry = new WorkEntry(start.getTime(), end.getTime(), new BigDecimal(11.5d), "job");
 
 		start.set(2012, Calendar.JANUARY, dayOfMonth, 15, 0, 0);
 		start.set(Calendar.MILLISECOND, 0);
 		end.set(2012, Calendar.JANUARY, dayOfMonth, 18, 0, 0);
 		end.set(Calendar.MILLISECOND, 0);
 		
-		WorkEntry thirdWorkEntry = new WorkEntry(start.getTime(), end.getTime(), new BigDecimal(11.5d));		
-	
-		WorkDay day = new WorkDay();
+		WorkEntry thirdWorkEntry = new WorkEntry(start.getTime(), end.getTime(), new BigDecimal(11.5d), "job");		
+
+		DateTime dayStart = new DateTime(2012, 1, dayOfMonth, 8, 0);
+		DateTime dayEnd = new DateTime(2012, 1, dayOfMonth + 1, 8, 0);					
+		WorkDay day = new WorkDay(dayStart.toDate(), dayEnd.toDate());		
 		
 		day.addEntry(firstWorkEntry);
 		day.addEntry(secondWorkEntry);
-		day.addEntry(thirdWorkEntry);
-
-		// apply day rules
-		day = overtime.calculateDay(day, getDayLimits(7.5, 24d));		
+		day.addEntry(thirdWorkEntry);		
 		
 		return day;
 	}
@@ -83,7 +81,7 @@ public class WorkWeekTest {
 	public void testSimple() {
 		WorkWeek week = createAndPopulateWeek();
 		
-		week = overtime.calculateWeek(week, 
+		week = Overtime.calculateWeek(week, 
 				getWeekLimits(20d, 7), 
 				getDayLimits(7.5, 24d));
 		
@@ -107,7 +105,7 @@ public class WorkWeekTest {
 	public void testConsecutive() {
 		WorkWeek week = createAndPopulateWeek();			
 
-		week = overtime.calculateWeek(week, 
+		week = Overtime.calculateWeek(week, 
 				getWeekLimits(20d, 2), 
 				getDayLimits(7.5, 24d));		
 		

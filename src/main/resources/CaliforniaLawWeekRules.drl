@@ -1,5 +1,5 @@
 #created on: Feb 18, 2012
-package com.leonty.etm.rule
+package com.leonty.etm.calculation
 
 #list any import classes here.
 import com.leonty.etm.time.WorkWeek;

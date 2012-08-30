@@ -3,19 +3,21 @@ package com.leonty.etm.test;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import com.leonty.calculation.TimeEntry;
+import com.leonty.etm.calculation.TimeEntry;
 
 public class TimeEntryTestImpl implements TimeEntry {
 
 	private Date timeIn;
 	private Date timeOut;
 	private BigDecimal wage;
+	private String jobTitle;
 		
-	public TimeEntryTestImpl(Date timeIn, Date timeOut, BigDecimal wage) {
+	public TimeEntryTestImpl(Date timeIn, Date timeOut, BigDecimal wage, String jobTitle) {
 		super();
 		this.timeIn = timeIn;
 		this.timeOut = timeOut;
 		this.wage = wage;
+		this.jobTitle = jobTitle;
 	}
 
 	@Override
@@ -41,6 +43,11 @@ public class TimeEntryTestImpl implements TimeEntry {
 	@Override
 	public void setTimeOut(Date timeOut) {
 		this.timeOut = timeOut;
+	}
+
+	@Override
+	public String getJobTitle() {
+		return jobTitle;
 	}
 
 }

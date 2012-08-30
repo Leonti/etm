@@ -1,4 +1,4 @@
-package com.leonty.etm.rule;
+package com.leonty.etm.calculation;
 
 public class DayLimits {
 	
@@ -21,7 +21,5 @@ public class DayLimits {
 	}
 	public void setExtraOvertimeLimit(Long extraOvertimeLimit) {
 		this.extraOvertimeLimit = extraOvertimeLimit;
-	}
-	
-	
+	}	
 }

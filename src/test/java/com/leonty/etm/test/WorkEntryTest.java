@@ -23,7 +23,7 @@ public class WorkEntryTest {
 		end.set(2012, Calendar.JANUARY, 1, 18, 0, 0);
 		end.set(Calendar.MILLISECOND, 0);
 		
-		return new WorkEntry(start.getTime(), end.getTime(), new BigDecimal(11.5d));		
+		return new WorkEntry(start.getTime(), end.getTime(), new BigDecimal(11.5d), "job");		
 	}
 	
 	private WorkEntry createRegularOvertimeWorkEntry() {

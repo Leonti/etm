@@ -13,12 +13,14 @@ public class WorkEntry {
 	private OvertimeCheckpoints checkpoints = new OvertimeCheckpoints();
 	
 	private BigDecimal wage;
+	private String jobTitle;
 	
-	public WorkEntry(Date timeIn, Date timeOut, BigDecimal wage) {
+	public WorkEntry(Date timeIn, Date timeOut, BigDecimal wage, String jobTitle) {
 		super();
 		this.timeIn = timeIn;
 		this.timeOut = timeOut;
 		this.wage = wage;
+		this.jobTitle = jobTitle;
 	}
 	
 	public void setOvertimeStart(int position, Date overtimeStart) {
@@ -147,5 +149,13 @@ public class WorkEntry {
 	
 	public Date getTime(int position) {
 		return checkpoints.getDateCheckpoint(position);
-	}	
+	}
+
+	public String getJobTitle() {
+		return jobTitle;
+	}
+
+	public void setJobTitle(String jobTitle) {
+		this.jobTitle = jobTitle;
+	}
 }
