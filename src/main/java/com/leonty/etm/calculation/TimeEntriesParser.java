@@ -9,10 +9,11 @@ import org.joda.time.DateTime;
 import com.leonty.etm.time.WorkDay;
 import com.leonty.etm.time.WorkEntry;
 import com.leonty.etm.time.WorkWeek;
+import com.leonty.etm.time.WorkWeeks;
 
 public class TimeEntriesParser {
 
-	public static List<WorkWeek> getWorkWeeks(Date startDate, Date endDate, List<TimeEntry> timeEntries) {
+	public static WorkWeeks getWorkWeeks(Date startDate, Date endDate, List<TimeEntry> timeEntries) {
 		
 		DateTime start = new DateTime(startDate);
 		DateTime end = new DateTime(endDate);
@@ -41,7 +42,7 @@ public class TimeEntriesParser {
 			
 			dayCount++;						
 		}
-		return weeks;
+		return new WorkWeeks(weeks);
 	}
 	
 	// signOut is null so employee is still working

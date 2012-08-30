@@ -11,6 +11,7 @@ import org.junit.Test;
 import com.leonty.etm.calculation.TimeEntriesParser;
 import com.leonty.etm.calculation.TimeEntry;
 import com.leonty.etm.time.WorkWeek;
+import com.leonty.etm.time.WorkWeeks;
 
 public class TimeEntriesParserTest {
 
@@ -34,7 +35,7 @@ public class TimeEntriesParserTest {
 		DateTime start = new DateTime(2012, 8, 1, 8, 0);
 		DateTime end = new DateTime(2012, 8, 10, 17, 0);		
 		
-		List<WorkWeek> workWeeks = TimeEntriesParser.getWorkWeeks(start.toDate(), end.toDate(), createTestTimeEntries());
+		WorkWeeks workWeeks = TimeEntriesParser.getWorkWeeks(start.toDate(), end.toDate(), createTestTimeEntries());
 		
 		Assert.assertTrue("10 days should amount to 2 weeks", 2 == workWeeks.size());
 		Assert.assertTrue("First week should have 7 days", 7 == workWeeks.get(0).getDays().size());

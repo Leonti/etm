@@ -135,8 +135,7 @@ public class WorkWeek {
 	
 	public Long getTotalTimeSpanInSeconds() {
 		return getRegularTimeSpanInSeconds() + getRegularOvertimeTimeSpanInSeconds() + getExtraOvertimeTimeSpanInSeconds();
-	}
-	
+	}	
 	
 	public Long getTotalTimeSpanInSeconds(int daysCount) {
 		
