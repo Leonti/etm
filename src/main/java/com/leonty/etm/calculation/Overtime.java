@@ -14,6 +14,7 @@ import org.drools.runtime.StatefulKnowledgeSession;
 
 import com.leonty.etm.time.WorkDay;
 import com.leonty.etm.time.WorkWeek;
+import com.leonty.etm.time.WorkWeeks;
 
 public class Overtime {
 
@@ -62,7 +63,7 @@ public class Overtime {
 		return workWeek;
 	}
 
-	public static List<WorkWeek> calcualateWeeks(List<WorkWeek> workWeeks, WeekLimits weekLimits, DayLimits dayLimits) {
+	public static WorkWeeks calcualateWeeks(WorkWeeks workWeeks, WeekLimits weekLimits, DayLimits dayLimits) {
 		for (WorkWeek week : workWeeks) {
 			week = calculateWeek(week, 
 					weekLimits, 

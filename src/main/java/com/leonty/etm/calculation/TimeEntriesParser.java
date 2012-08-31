@@ -20,7 +20,7 @@ public class TimeEntriesParser {
 		
 		timeEntries = fixLastEntry(timeEntries, endDate);
 		
-		ArrayList<WorkWeek> weeks = new ArrayList<WorkWeek>();	
+		List<WorkWeek> weeks = new ArrayList<WorkWeek>();	
 		
 		DateTime currentTimeDayStart = new DateTime(start);
 		int dayCount = 0;

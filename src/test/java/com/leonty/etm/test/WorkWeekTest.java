@@ -99,6 +99,8 @@ public class WorkWeekTest {
 		assertTrue(new BigDecimal(474.375).compareTo(week.getRegularOvertimePayment(new BigDecimal(1.5))) == 0);
 		
 		assertTrue(new BigDecimal(0L).compareTo(week.getExtraOvertimePayment(new BigDecimal(2L))) == 0);
+		
+		assertTrue(new BigDecimal(704.375).compareTo(week.getTotalPayment(new BigDecimal(1.5), new BigDecimal(2L))) == 0);
 	}
 	
 	@Test
@@ -125,6 +127,8 @@ public class WorkWeekTest {
 		assertTrue(new BigDecimal(457.125).compareTo(week.getRegularOvertimePayment(new BigDecimal(1.5))) == 0);
 		
 		assertTrue(new BigDecimal(138).compareTo(week.getExtraOvertimePayment(new BigDecimal(2L))) == 0);
+		
+		assertTrue(new BigDecimal(767.625).compareTo(week.getTotalPayment(new BigDecimal(1.5), new BigDecimal(2L))) == 0);
 	}	
 
 }

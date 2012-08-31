@@ -158,4 +158,8 @@ public class WorkEntry {
 	public void setJobTitle(String jobTitle) {
 		this.jobTitle = jobTitle;
 	}
+	
+	public BigDecimal getWage() {
+		return this.wage;
+	}
 }

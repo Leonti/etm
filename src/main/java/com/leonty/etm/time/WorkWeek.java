@@ -193,5 +193,9 @@ public class WorkWeek {
 		}
 
 		return payment;
-	}	
+	}
+	
+	public BigDecimal getTotalPayment(BigDecimal multiplier, BigDecimal extraMultiplier) {
+		return getRegularPayment().add(getRegularOvertimePayment(multiplier)).add(getExtraOvertimePayment(extraMultiplier));
+	}
 }
