@@ -1,13 +1,14 @@
 package com.leonty.etm.calculation;
 
 import java.math.BigDecimal;
-import java.util.Date;
+
+import org.joda.time.DateTime;
 
 public interface TimeEntry {
 
-	Date getTimeIn();
-	Date getTimeOut();
-	void setTimeOut(Date timeOut);
+	DateTime getTimeIn();
+	DateTime getTimeOut();
+	void setTimeOut(DateTime timeOut);
 	BigDecimal getWage();
 	String getJobTitle();
 }

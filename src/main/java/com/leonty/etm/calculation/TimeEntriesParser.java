@@ -1,7 +1,6 @@
 package com.leonty.etm.calculation;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.joda.time.DateTime;
@@ -13,7 +12,7 @@ import com.leonty.etm.time.WorkWeeks;
 
 public class TimeEntriesParser {
 
-	public static WorkWeeks getWorkWeeks(Date startDate, Date endDate, List<TimeEntry> timeEntries) {
+	public static WorkWeeks getWorkWeeks(DateTime startDate, DateTime endDate, List<TimeEntry> timeEntries) {
 		
 		DateTime start = new DateTime(startDate);
 		DateTime end = new DateTime(endDate);
@@ -46,7 +45,7 @@ public class TimeEntriesParser {
 	}
 	
 	// signOut is null so employee is still working
-	private static List<TimeEntry> fixLastEntry(List<TimeEntry> timeEntries, Date endDate) {
+	private static List<TimeEntry> fixLastEntry(List<TimeEntry> timeEntries, DateTime endDate) {
 		
 		if (timeEntries.size() > 0 
 				&& timeEntries.get(timeEntries.size() - 1).getTimeOut() == null) {
@@ -62,10 +61,10 @@ public class TimeEntriesParser {
 		
 		for (TimeEntry timeEntry : timeEntries) {
 			
-			if (isInsideTimeSpan(timeEntry, start.toDate(), end.toDate())) {
+			if (isInsideTimeSpan(timeEntry, start, end)) {
 				workEntries.add(new WorkEntry(
-					getTimeIn(timeEntry, start.toDate()), 
-					getTimeOut(timeEntry, end.toDate()), 
+					getTimeIn(timeEntry, start).toDate(), 
+					getTimeOut(timeEntry, end).toDate(), 
 					timeEntry.getWage(),
 					timeEntry.getJobTitle()));				
 			}
@@ -75,18 +74,18 @@ public class TimeEntriesParser {
 	} 
 
 	// if work started before the start of the day - cut the limit off
-	private static Date getTimeIn(TimeEntry timeEntry, Date dayStart) {
+	private static DateTime getTimeIn(TimeEntry timeEntry, DateTime dayStart) {
 		
-		if (timeEntry.getTimeIn().before(dayStart)) 
+		if (timeEntry.getTimeIn().isBefore(dayStart)) 
 			return dayStart;
 
 		return timeEntry.getTimeIn();
 	}
 	
 	// if work is ending after the days end - cut it at the top
-	private static Date getTimeOut(TimeEntry timeEntry, Date dayEnd) {
+	private static DateTime getTimeOut(TimeEntry timeEntry, DateTime dayEnd) {
 		
-		if (timeEntry.getTimeOut().after(dayEnd))
+		if (timeEntry.getTimeOut().isAfter(dayEnd))
 			return dayEnd;
 			
 		return timeEntry.getTimeOut();
@@ -100,20 +99,20 @@ public class TimeEntriesParser {
 	 * @param end - end of the timespan
 	 * @return
 	 */
-	private static boolean isInsideTimeSpan(TimeEntry time, Date start, Date end) {
+	private static boolean isInsideTimeSpan(TimeEntry time, DateTime start, DateTime end) {
 		
 		/* Time entry can be considered belonging to today only if it started yesterday and overlaps till today
 		 * Or it started during today
 		 * */
 		
 		// work started yesterday and still continues today or even later
-		if (time.getTimeIn().before(start) && time.getTimeOut().after(start)) {
+		if (time.getTimeIn().isBefore(start) && time.getTimeOut().isAfter(start)) {
 			return true;
 		}
 		
 		// work started inside the time span. Start is inclusive
-		if ((time.getTimeIn().after(start) || time.getTimeIn().compareTo(start) == 0) 
-				&& time.getTimeIn().before(end)) {
+		if ((time.getTimeIn().isAfter(start) || time.getTimeIn().compareTo(start) == 0) 
+				&& time.getTimeIn().isBefore(end)) {
 			return true;
 		}
 		

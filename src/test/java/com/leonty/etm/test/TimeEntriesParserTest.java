@@ -22,7 +22,7 @@ public class TimeEntriesParserTest {
 		for(int i = 1; i < 11; i++) {
 			DateTime start = new DateTime(2012, 8, i, 8, 0);
 			DateTime end = new DateTime(2012, 8, i, 17, 0);			
-			timeEntries.add(new TimeEntryTestImpl(start.toDate(), end.toDate(), new BigDecimal(10d), "job"));
+			timeEntries.add(new TimeEntryTestImpl(start, end, new BigDecimal(10d), "job"));
 		}
 		
 		return timeEntries;
@@ -34,11 +34,11 @@ public class TimeEntriesParserTest {
 		DateTime start = new DateTime(2012, 8, 1, 8, 0);
 		DateTime end = new DateTime(2012, 8, 10, 17, 0);		
 		
-		WorkWeeks workWeeks = TimeEntriesParser.getWorkWeeks(start.toDate(), end.toDate(), createTestTimeEntries());
+		WorkWeeks workWeeks = TimeEntriesParser.getWorkWeeks(start, end, createTestTimeEntries());
 		
 		Assert.assertTrue("10 days should amount to 2 weeks", 2 == workWeeks.size());
-//		Assert.assertTrue("First week should have 7 days", 7 == workWeeks.get(0).getDays().size());
-//		Assert.assertTrue("Second week should have 3 days from 10 days total", 3 == workWeeks.get(1).getDays().size());
+		Assert.assertTrue("First week should have 7 days", 7 == workWeeks.get(0).getDays().size());
+		Assert.assertTrue("Second week should have 3 days from 10 days total", 3 == workWeeks.get(1).getDays().size());
 	}
 	
 	@Test
@@ -49,9 +49,9 @@ public class TimeEntriesParserTest {
 		
 		List<TimeEntry> timeEntries = new ArrayList<TimeEntry>();
  
-		timeEntries.add(new TimeEntryTestImpl(new DateTime(2012, 8, 1, 8, 0).toDate(), new DateTime(2012, 8, 2, 17, 0).toDate(), new BigDecimal(10d), "job"));
+		timeEntries.add(new TimeEntryTestImpl(new DateTime(2012, 8, 1, 8, 0), new DateTime(2012, 8, 2, 17, 0), new BigDecimal(10d), "job"));
 			
-		WorkWeeks workWeeks = TimeEntriesParser.getWorkWeeks(start.toDate(), end.toDate(), timeEntries);
+		WorkWeeks workWeeks = TimeEntriesParser.getWorkWeeks(start, end, timeEntries);
 
 		// start at 8.00 one day, end 17.00 on second
 		
@@ -68,9 +68,9 @@ public class TimeEntriesParserTest {
 		
 		List<TimeEntry> timeEntries = new ArrayList<TimeEntry>();
  
-		timeEntries.add(new TimeEntryTestImpl(new DateTime(2012, 8, 1, 8, 0).toDate(), null, new BigDecimal(10d), "job"));
+		timeEntries.add(new TimeEntryTestImpl(new DateTime(2012, 8, 1, 8, 0), null, new BigDecimal(10d), "job"));
 			
-		WorkWeeks workWeeks = TimeEntriesParser.getWorkWeeks(start.toDate(), end.toDate(), timeEntries);
+		WorkWeeks workWeeks = TimeEntriesParser.getWorkWeeks(start, end, timeEntries);
 
 		Assert.assertEquals("First day should contain 24 hours", new Double(24d), workWeeks.get(0).getDays().get(0).getTotalTimeSpanInHours());
 		Assert.assertEquals("Second day should contain 9 hours", new Double(9d), workWeeks.get(0).getDays().get(1).getTotalTimeSpanInHours());		
